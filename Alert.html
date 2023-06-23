@@ -1,0 +1,537 @@
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+    <title>Weather Forecast App</title>
+    <style>
+      /* Add your CSS styles here */
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(
+            rgba(17, 17, 17, 0.7),
+            rgba(17, 17, 17, 0.7)
+          ),
+          url(background.jpg) center/cover fixed;
+        margin: 0;
+        padding: 20px;
+        color: #f2f1ef;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      .btn2 {
+        height: 40px;
+        width: 80px;
+        color: white;
+        background-color: green;
+        border-radius: 10px;
+        border: none;
+        margin-left: 120px;
+        margin-top: 60px;
+      }
+      .btn2:hover {
+        background-color: rgb(10, 173, 10);
+      }
+      .btn2 a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 22px;
+      }
+      .city-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+      }
+      .h2 {
+        color: rgb(149, 146, 146);
+      }
+      h2 {
+        color: green;
+      }
+      .city {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 300px;
+        height: 200px;
+        border-radius: 10px;
+        background-color: rgba(51, 51, 51, 0.7);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        cursor: pointer;
+        overflow: hidden;
+      }
+
+      .city:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+      }
+
+      .city-content {
+        text-align: center;
+        padding: 20px;
+      }
+
+      .city-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .city-description {
+        font-size: 16px;
+      }
+
+      .city.danger {
+        background-color: #ff4242;
+      }
+
+      .city.danger:hover {
+        background-color: #ff5a5a;
+      }
+      .heading {
+        text-decoration: double;
+        font-weight: bold;
+        text-shadow: 1px 2px 2px rgb(54, 51, 51);
+      }
+
+      @keyframes blink {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .blink {
+        animation: blink 1s linear infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        50% {
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+        100% {
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+      }
+
+      @media only screen and (max-width: 768px) {
+        .city {
+          width: 100%;
+          height: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <button class="btn2"><a href="/index.html">Home</a></button>
+    <h1 class="heading">Weather Forecast</h1>
+
+    <div class="city-container" id="dangerCitiesContainer">
+      <h1 class="h2">
+        Weather Alert:
+        <span class="blink" style="color: red">High-Risk Cities</span>
+      </h1>
+    </div>
+
+    <div id="noCitiesMessage" style="display: none; text-align: center">
+      <h2>No cities found in the danger zone</h2>
+    </div>
+
+    <script>
+      // Replace 'YOUR_API_KEY' with your actual API key
+      const apiKey = "0893e55a246424030a50aa872054c00e";
+
+      // Function to fetch weather data for a city
+      const fetchWeatherData = async (city) => {
+        const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?q=${city},in&appid=${apiKey}`
+        );
+        const data = await response.json();
+        if (response.ok) {
+          return data;
+        } else {
+          throw new Error("Weather data request failed.");
+        }
+      };
+
+      // Function to check if dangerous weather condition is present
+      const isDangerousWeather = (weather) => {
+        const dangerousWeather = [
+          "Thunderstorm",
+          "Tornado",
+          "Hurricane",
+          "Extreme",
+        ];
+        return dangerousWeather.includes(weather?.main);
+      };
+
+      // Fetch cities from JSON file
+      const fetchCities = async () => {
+        const response = await fetch("cities.json");
+        const data = await response.json();
+        return data.cities;
+      };
+
+      // Display dangerous cities
+      const displayCities = async () => {
+        const cities = await fetchCities();
+        const dangerCitiesContainer = document.getElementById(
+          "dangerCitiesContainer"
+        );
+        const noCitiesMessage = document.getElementById("noCitiesMessage");
+
+        let dangerCitiesCount = 0;
+
+        const promises = cities.map((city) => {
+          return fetchWeatherData(city)
+            .then((data) => {
+              const weather = data.weather[0];
+
+              const cityElement = document.createElement("div");
+              cityElement.classList.add("city");
+
+              // Check for dangerous weather condition
+              if (isDangerousWeather(weather)) {
+                cityElement.classList.add("danger");
+                dangerCitiesCount++;
+
+                const cityContent = document.createElement("div");
+                cityContent.classList.add("city-content");
+
+                const cityTitle = document.createElement("div");
+                cityTitle.classList.add("city-title");
+                cityTitle.textContent = city;
+
+                const cityDescription = document.createElement("div");
+                cityDescription.classList.add("city-description");
+                cityDescription.textContent = weather.description;
+
+                cityContent.appendChild(cityTitle);
+                cityContent.appendChild(cityDescription);
+                cityElement.appendChild(cityContent);
+                dangerCitiesContainer.appendChild(cityElement);
+              }
+            })
+            .catch((error) => {
+              console.log(
+                `An error occurred while fetching weather for ${city}:`,
+                error
+              );
+            });
+        });
+
+        // Wait for all promises to resolve
+        await Promise.all(promises);
+
+        // Display no cities message if no danger cities found
+        if (dangerCitiesCount === 0) {
+          noCitiesMessage.style.display = "block";
+          document.body.style.backgroundImage = "url(weatherg.jpg)";
+          document.body.style.backgroundSize = "cover";
+        }
+      };
+
+      // Call the function to display cities
+      displayCities();
+    </script>
+  </body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Weather Forecast App</title>
+    <style>
+      /* Add your CSS styles here */
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(rgba(17, 17, 17, 0.7), rgba(17, 17, 17, 0.7)),
+          url(background.jpg) center/cover fixed;
+        margin: 0;
+        padding: 20px;
+        color: #f2f1ef;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .btn2 {
+        height: 40px;
+        width: 80px;
+        color: white;
+        background-color: green;
+        border-radius: 10px;
+        border: none;
+        margin-left: 120px;
+        margin-top: 60px;
+        transition: background-color 0.3s ease-in-out;
+      }
+
+      .btn2:hover {
+        background-color: rgb(10, 173, 10);
+      }
+
+      .btn2 a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 22px;
+      }
+
+      .city-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .h2 {
+        color: rgb(149, 146, 146);
+      }
+
+      h2 {
+        color: green;
+      }
+
+      .city {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 300px;
+        height: 200px;
+        border-radius: 10px;
+        background-color: rgba(51, 51, 51, 0.7);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        cursor: pointer;
+        overflow: hidden;
+      }
+
+      .city:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+      }
+
+      .city-content {
+        text-align: center;
+        padding: 20px;
+      }
+
+      .city-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .city-description {
+        font-size: 16px;
+      }
+
+      .city.danger {
+        background-color: #ff4242;
+      }
+
+      .city.danger:hover {
+        background-color: #ff5a5a;
+      }
+
+      .heading {
+        text-decoration: double;
+        font-weight: bold;
+        text-shadow: 1px 2px 2px rgb(54, 51, 51);
+      }
+
+      @keyframes blink {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .blink {
+        animation: blink 1s linear infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        50% {
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+        100% {
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+      }
+
+      @media only screen and (max-width: 768px) {
+        body {
+          padding: 10px;
+        }
+
+        .btn2 {
+          margin: 20px auto;
+        }
+
+        .city {
+          width: 100%;
+          height: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <button class="btn2"><a href="/index.html">Home</a></button>
+    <h1 class="heading">Weather Forecast</h1>
+
+    <div class="city-container" id="dangerCitiesContainer">
+      <h1 class="h2">
+        Weather Alert:
+        <span class="blink" style="color: red">High-Risk Cities</span>
+      </h1>
+    </div>
+
+    <div id="noCitiesMessage" style="display: none; text-align: center">
+      <h2>No cities found in the danger zone</h2>
+    </div>
+
+    <script>
+      const apiKey = "0893e55a246424030a50aa872054c00e";
+
+      // Function to fetch weather data for a city
+      const fetchWeatherData = async (city) => {
+        const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?q=${city},in&appid=${apiKey}`
+        );
+        const data = await response.json();
+        if (response.ok) {
+          return data;
+        } else {
+          throw new Error("Weather data request failed.");
+        }
+      };
+
+      // Function to check if dangerous weather condition is present
+      const isDangerousWeather = (weather) => {
+        const dangerousWeather = [
+          "Thunderstorm",
+          "Tornado",
+          "Hurricane",
+          "Extreme",
+        ];
+        return dangerousWeather.includes(weather?.main);
+      };
+
+      // Fetch cities from JSON file
+      const fetchCities = async () => {
+        const response = await fetch("cities.json");
+        const data = await response.json();
+        return data.cities;
+      };
+
+      // Display dangerous cities
+      const displayCities = async () => {
+        const cities = await fetchCities();
+        const dangerCitiesContainer = document.getElementById(
+          "dangerCitiesContainer"
+        );
+        const noCitiesMessage = document.getElementById("noCitiesMessage");
+
+        let dangerCitiesCount = 0;
+
+        const promises = cities.map((city) => {
+          return fetchWeatherData(city)
+            .then((data) => {
+              const weather = data.weather[0];
+
+              const cityElement = document.createElement("div");
+              cityElement.classList.add("city");
+
+              // Check for dangerous weather condition
+              if (isDangerousWeather(weather)) {
+                cityElement.classList.add("danger");
+                dangerCitiesCount++;
+
+                const cityContent = document.createElement("div");
+                cityContent.classList.add("city-content");
+
+                const cityTitle = document.createElement("div");
+                cityTitle.classList.add("city-title");
+                cityTitle.textContent = city;
+
+                const cityDescription = document.createElement("div");
+                cityDescription.classList.add("city-description");
+                cityDescription.textContent = weather.description;
+
+                cityContent.appendChild(cityTitle);
+                cityContent.appendChild(cityDescription);
+                cityElement.appendChild(cityContent);
+                dangerCitiesContainer.appendChild(cityElement);
+              }
+            })
+            .catch((error) => {
+              console.log(
+                `An error occurred while fetching weather for ${city}:`,
+                error
+              );
+            });
+        });
+
+        // Wait for all promises to resolve
+        await Promise.all(promises);
+
+        // Display no cities message if no danger cities found
+        if (dangerCitiesCount === 0) {
+          noCitiesMessage.style.display = "block";
+          document.body.style.backgroundImage = "url(weatherg.jpg)";
+          document.body.style.backgroundSize = "cover";
+        }
+      };
+
+      // Call the function to display cities
+      displayCities();
+    </script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+

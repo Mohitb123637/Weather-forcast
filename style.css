@@ -1,0 +1,474 @@
+@import url('https://fonts.googleapis.com/css2?family=Concert+One:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+/* Common styles for all screen sizes */
+html {
+  height: 100%;
+}
+/* body {
+  font-family: 'Roboto', sans-serif;
+  text-transform: capitalize;
+  padding: 1rem;
+  background: linear-gradient(45deg, rgba(123, 169, 255, 0.717), rgba(17, 78, 219, 0.679)), url('./background.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  overflow: hidden;
+} */
+body {
+  font-family: 'Roboto', sans-serif;
+  text-transform: capitalize;
+  padding: 1rem;
+  background: linear-gradient(45deg, rgba(123, 169, 255, 0.717), rgba(17, 78, 219, 0.679)), url('./background.jpg');
+  background-size: cover;
+  background-repeat: repeat;
+  background-color: rgba(123, 169, 255, 0.717); /* Set your desired background color */
+  height: 100vh;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#city{
+  color: white;
+  text-shadow: 1px 2px 2px black;
+  letter-spacing: 4px;
+}
+.btn{
+  height: 40px;
+  width: 80px;
+  color: white;
+  background-color: red;
+  border-radius: 10px;
+  border: none;
+  margin-top: -35px;
+  animation: hide-show-background 1s infinite;
+}
+.btn a{
+  color: white;
+  text-decoration: none;
+font-weight: bold;
+font-size: 22px;
+}
+
+
+@keyframes hide-show-background {
+  0% {
+    background-color: red;
+  }
+  50% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: red;
+  }
+}
+
+
+
+.btn:hover{
+  background-color: rgb(243, 58, 58);
+  animation: none;
+}
+.header h1 {
+  color: rgb(213, 233, 237);
+  /* text-decoration: underline; */
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 1px 1px 3px black;
+}
+
+#input {
+  font-size: 18px;
+  padding: 5px 10px;
+  outline: none;
+  border: none;
+  border-radius: 15px;
+  background: aliceblue;
+}
+
+#voiceBtn{
+  height: 45px;
+  width: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: black;
+  border: 1px solid red;
+  font-weight: bold;
+  margin-right: 35px;
+}
+
+#search {
+  background: none;
+  padding: 5px 20px;
+  color: aliceblue;
+  outline: none;
+  background: cadetblue;
+  font-size: 17px;
+  border-radius: 15px;
+  cursor: pointer;
+  border: none;
+}
+
+.weather {
+  text-align: center;
+  color: aliceblue;
+}
+
+#city {
+  font-size: 30px;
+}
+
+.weather img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: rgba(240, 248, 255, 0.408);
+}
+
+#temperature {
+  font-size: 50px;
+  margin: 0;
+  margin-left: 30px;
+  margin-bottom: 10px;
+}
+
+.temp-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 30px 0;
+}
+
+#clouds {
+  font-size: 20px;
+  background: rgba(153, 205, 50, 0.778);
+  padding: 2px 20px;
+  border-radius: 15px;
+}
+
+main {
+  display: grid;
+  grid-column-gap: 25px;
+  grid-template-columns: 1fr 5px 1fr;
+  align-items: center;
+  margin: 0 2rem;
+  color: white;
+}
+
+.next {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.next p, .next h3 {
+  margin: 3px 0;
+}
+
+.forecstD {
+  margin: 20px 2rem;
+  color: aliceblue;
+}
+
+.weekF {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.cast-header {
+  color: aliceblue;
+  background: rgba(254, 189, 132, 0.539);
+  width: max-content;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.divider1,
+.divider2 {
+  background: rgba(254, 189, 132, 0.539);
+  height: 200px;
+  border-radius: 5px;
+}
+
+.divider2 {
+  height: 5px;
+  width: 30%;
+  margin: 0 auto;
+}
+
+.time,
+.date {
+  color: rgb(254, 189, 132);
+}
+
+.desc {
+  color: rgb(196, 255, 77);
+}
+
+/* Add animation to the header */
+.header {
+    animation-name: slideInDown;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+  }
+  
+  @keyframes slideInDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Add animation to the weather section */
+  .weather {
+    animation-name: fadeIn;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+  }
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+
+/* Responsive styles */
+
+/* Small devices (mobile phones) */
+@media only screen and (max-width: 600px) {
+  body {
+    padding: 1rem;
+  }
+
+  main {
+    grid-template-columns: 1fr;
+    margin: 0 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #input {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  #voiceBtn{
+    margin-left: 160px;
+  }
+
+  #search {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .temp-box {
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 1rem 0;
+  }
+
+  #temperature {
+    margin: 0;
+    margin-top: 1rem;
+  }
+
+  .forecstD {
+    margin: 1rem 0;
+  }
+
+  .weekF {
+    grid-template-columns: 1fr;
+  }
+
+  body{
+    overflow: auto;
+  }
+  .divider1,
+.divider2 {
+  background: rgba(254, 189, 132, 0.539);
+  margin-top: 10px;
+  height: 5px;
+  border-radius: 2px;
+}
+
+.divider2 {
+  height: 5px;
+  width: 10%;
+  margin: 0 auto;
+}
+
+}
+
+/* Medium devices (tablets) */
+@media only screen and (min-width: 601px) and (max-width: 1024px) {
+  body {
+    padding: 2rem;
+  }
+
+  main {
+    margin: 0;
+  }
+
+  .header {
+    flex-direction: row;
+  }
+
+  #input {
+    width: 300px;
+    margin-right: 1rem;
+  }
+
+  .temp-box {
+    margin: 2rem 0;
+  }
+
+  .weekF {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  body{
+    overflow: auto;
+  }
+}
+
+/* Large devices (desktops) */
+@media only screen and (min-width: 1025px) {
+  body {
+    padding: 4rem 8rem;
+  }
+}
+
+/* Add transition properties to the header */
+.header {
+  transition: opacity 1s, transform 1s;
+}
+
+/* Add transition properties to the weather section */
+.weather {
+  transition: opacity 1s;
+}
+
+/* Add transition properties to the temperature box */
+.temp-box {
+  transition: margin 1s;
+}
+
+/* Add transition properties to the forecast section */
+.forecstD {
+  transition: margin 1s;
+}
+
+/* Add transition properties to the weekly forecast */
+.weekF {
+  transition: grid-template-columns 1s;
+}
+
+#input {
+  font-size: 18px;
+  padding: 5px 10px;
+  outline: none;
+  border: none;
+  border-radius: 15px;
+  background: aliceblue;
+  transition: background 0.3s ease-in-out;
+}
+
+#search {
+  background: none;
+  padding: 5px 20px;
+  color: aliceblue;
+  outline: none;
+  background: cadetblue;
+  font-size: 17px;
+  border-radius: 15px;
+  cursor: pointer;
+  border: none;
+  transition: background 0.3s ease-in-out;
+}
+
+#input:hover {
+  background: #e5f2ff;
+}
+
+#search:hover {
+  background: #6cb8e6;
+}
+
+
+
+/* digital .clock  */
+
+#time {
+  margin-bottom: 40px;
+  margin-top: 30px;
+  display: flex;
+  padding: 10px 20px;
+  font-size: 2em;
+  font-weight: 600;
+  border: none;
+  border-radius: 40px;
+  box-shadow: none
+  
+}
+
+#time div {
+  position: relative;
+  width: 60px;
+  text-align: center;
+  font-weight: 500;
+  color: white;
+  text-shadow: 1px 1px 2px black;
+  opacity: 85%;
+}
+
+#time div:nth-child(1)::after,
+#time div:nth-child(2)::after {
+
+  content: ':';
+  position: absolute;
+  right: -4px;
+}
+
+#time div:last-child {
+  font-size: 0.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  text-shadow: 1px 1px 2px black;
+}
+
+#time div:nth-child(2)::after 
+{
+  animation: animate 1s steps(1) infinite;
+}
+@keyframes animate 
+{
+  0%
+  {
+      opacity: 1;
+  }
+  50%
+  {
+      opacity: 0;
+  }
+}
